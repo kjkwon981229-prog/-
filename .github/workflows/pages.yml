@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths-ignore:
       - DEPLOYED.txt
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -41,6 +43,7 @@ jobs:
         uses: actions/deploy-pages@v4
 
       - name: Record deployment URL
+        if: github.event_name == 'push'
         run: |
           printf '%s\n' '${{ steps.deployment.outputs.page_url }}' > DEPLOYED.txt
           git config user.name 'github-actions[bot]'
